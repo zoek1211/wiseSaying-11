@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class App {
     private Scanner sc = new Scanner(System.in);
@@ -150,13 +151,11 @@ public class App {
 
     // id에 해당하는 명언의 인덱스를 찾는 메서드
     private int findIndexById(int id) {
-        for (int i = 0; i < wiseSayings.size(); i++) {
-            if (wiseSayings.get(i).getId() == id) {
-                return i;
-            }
-
-        }
-        return -1; // id에 해당하는 명언이 없는 경우 -1 반환
+        // stream을 사용하여 명언 배열에서 id에 해당하는 명언의 인덱스를 찾음
+       return IntStream.range(0, wiseSayings.size())
+                .filter(index -> wiseSayings.get(index).getId() == id) // id에 해당하는 명언의 인덱스를 찾음
+                .findFirst() // 첫 번째로 찾은 인덱스를 반환
+                .orElse(-1); // id에 해당하는 명언이 없는 경우 -1 반환
     }
 
     // id에 해당하는 명언을 찾는 메서드
