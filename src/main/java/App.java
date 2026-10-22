@@ -91,10 +91,10 @@ public class App {
         // id를 정수로 변환
         int id = Integer.parseInt(cmdBits[1]);
 
-        int deletedIndex = delete(id);
+        boolean deleted = delete(id);
 
         // 삭제된 인덱스가 -1이면 해당 id의 명언이 존재하지 않음을 알림
-        if (deletedIndex == -1) {
+        if (!deleted) {
             System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
             return;
         }
@@ -104,15 +104,14 @@ public class App {
     }
 
     // 삭제 메서드
-    private int delete(int id) {
-        int deleteIndex = findIndexById(id); // id에 해당하는 명언의 인덱스를 찾음
-
-        // 삭제할 명언이 없는 경우 -1 반환
-        if (deleteIndex == -1) return deleteIndex;
-
-        wiseSayings.remove(deleteIndex); // 명언 배열에서 해당 인덱스의 명언 삭제
-
-        return deleteIndex; // 삭제된 인덱스 반환
+    private boolean delete(int id) {
+        // 기존 로직보다 성능은 안좋지만 가독성이 좋음
+        // 실무에선 이런 선택을 하면 안된다
+        // removeIf 보여주기 위해 사용함
+        return wiseSayings
+                .removeIf(
+                      wiseSaying -> wiseSaying.getId() == id
+                );
     }
 
     // 수정 명령어 처리
