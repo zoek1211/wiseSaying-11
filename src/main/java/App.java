@@ -106,6 +106,7 @@ public class App {
     // 삭제 메서드
     private boolean delete(int id) {
         // 기존 로직보다 성능은 안좋지만 가독성이 좋음
+        // 무조건 전체탐색 진행 느림
         // 실무에선 이런 선택을 하면 안된다
         // removeIf 보여주기 위해 사용함
         return wiseSayings
@@ -148,23 +149,14 @@ public class App {
         modify(wiseSaying, content, author);
     }
 
-    // id에 해당하는 명언의 인덱스를 찾는 메서드
-    private int findIndexById(int id) {
-        // stream을 사용하여 명언 배열에서 id에 해당하는 명언의 인덱스를 찾음
-       return IntStream.range(0, wiseSayings.size())
-                .filter(index -> wiseSayings.get(index).getId() == id) // id에 해당하는 명언의 인덱스를 찾음
-                .findFirst() // 첫 번째로 찾은 인덱스를 반환
-                .orElse(-1); // id에 해당하는 명언이 없는 경우 -1 반환
-    }
-
     // id에 해당하는 명언을 찾는 메서드
-    // findIndexById 메서드를 사용하여 id에 해당하는 명언의 인덱스를 찾고, 해당 인덱스의 명언을 반환
+    // WiseSaying 객체를 반환, 없으면 null 반환
     private WiseSaying findById(int id) {
-        int index = findIndexById(id);
-
-        if (index == -1) return null;
-
-        return wiseSayings.get(index);
+        return wiseSayings
+                .stream()
+                .filter(wiseSaying -> wiseSaying.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     // 명언 수정 메서드
