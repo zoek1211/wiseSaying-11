@@ -1,58 +1,32 @@
 package com.back;
 
-import java.util.Scanner;
-
 public class Main {
+    // 프로그램 진입점
     public static void main(String[] args) {
-        System.out.println("== 명언 앱 ==");
+        App app = new App();
+        app.run();
 
-        Scanner sc = new Scanner(System.in);
+//        testRq1();
+    }
 
-        int lastId = 0;
+    // Rq 클래스의 파라미터 파싱이 잘 되는지 확인하는 테스트 메서드
+    private static void testRq1() {
+        Rq rq = new Rq("목록?searchKeywordType=content&searchKeyword=자바&page=2");
 
-        WiseSaying[] wiseSayings = new WiseSaying[100]; // use arraylist
-        int wiseSayingsLastIndex = -1; // array
+        String searchKeywordType = rq.getParam("searchKeywordType", "");
+        String searchKeyword = rq.getParam("searchKeyword", "");
 
-        while (true) {
-            System.out.println("명령) ");
-            String cmd = sc.nextLine().trim();
+        String sort = rq.getParam("sort", "idDesc");
+        int page = rq.getParamAsInt("page", -1);
+        int id = rq.getParamAsInt("id", -1);
 
-            if (cmd.equals("종료")) {
-                break;
-            } else if (cmd.equals("등록")) {
-                System.out.print("명언: ");
-                String content = sc.nextLine().trim();
-
-                System.out.print("작가: ");
-                String author = sc.nextLine().trim();
-
-                // 등록할때 마다 생성되는 명언번호가 증가
-                int id = ++lastId;
-
-                WiseSaying wiseSaying = new WiseSaying();
-                wiseSaying.id = id;
-                wiseSaying.content = content;
-                wiseSaying.author = author;
-
-                wiseSayings[++wiseSayingsLastIndex] = wiseSaying;
-
-
-                System.out.printf("%d번 명언이 등록되었습니다.\n", id);
-            } else if (cmd.equals("목록")) {
-                System.out.println("번호 / 작가 / 명언");
-                System.out.println("----------------");
-
-                for (int i = 0; i <= wiseSayingsLastIndex; i++) {
-                    WiseSaying wiseSaying = wiseSayings[i];
-
-                    System.out.printf("%d / %s / %s\n", wiseSaying.id, wiseSaying.author, wiseSaying.content);
-                }
-            }
-
-        }
-
-        sc.close();
-
+        System.out.println("action Name: " + rq.getActionName());
+        System.out.println("Param Search Keyword Type: " + searchKeywordType);
+        System.out.println("Param Search Keyword: " + searchKeyword);
+        System.out.println("Param Sort: " + sort);
+        System.out.println("Param Page: " + page);
+        System.out.println("Param Id: " + id);
     }
 }
+
 

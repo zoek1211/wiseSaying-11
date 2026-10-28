@@ -1,14 +1,15 @@
+package com.back;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.IntStream;
 
 public class App {
-    private Scanner sc = new Scanner(System.in);
+    private final Scanner sc = new Scanner(System.in);
 
-    private int lastId = 0;
+    private int lastId = 0; // 마지막으로 등록된 명언 번호
 
-    private List<WiseSaying> wiseSayings = new ArrayList<>(); // arraylist로 변경
+    private final List<WiseSaying> wiseSayings = new ArrayList<>(); // arraylist로 변경
 
     // run app 진입점 시작
     public void run() {
@@ -18,20 +19,21 @@ public class App {
             System.out.println("명령) ");
             String cmd = sc.nextLine().trim();
 
-            if (cmd.equals("종료")) {
-                break;
-            } else if (cmd.equals("등록")) {
-                actionWrite();
-            } else if (cmd.equals("목록")) {  //목록 출력
-                actionlist();
-            } else if (cmd.startsWith("삭제")) { // 삭제
-                actionDelete(cmd);
-            } else if (cmd.startsWith("수정")) { // 수정
-                actionModify(cmd);
+            // 입력받은 명령어를 actionName과 파라미터로 파싱
+            Rq rq = new Rq(cmd);
+
+            // 모던 스위치문 사용
+            switch (rq.getActionName()) {
+                case "종료"-> {
+                    System.out.println("프로그램이 종료합니다.");
+                    return;
+                }
+                case "목록" -> actionlist();
+                case "등록" -> actionWrite();
+                case "삭제" -> actionDelete(rq);
+                case "수정" -> actionModify(rq);
             }
         }
-
-        sc.close(); // 진입점 끝
     }
 
     // 명언 입력받음
@@ -79,21 +81,17 @@ public class App {
     }
 
     // 삭제 명령어 처리
-    private void actionDelete(String cmd) {
-        String[] cmdBits = cmd.split("=", 2); // 삭제 명령어와 id를 분리
+    private void actionDelete(Rq rq) {
+        int id = rq.getParamAsInt("id", -1);
 
-        // id가 입력되지 않은 경우 처리
-        if  (cmdBits.length < 2 || cmdBits[1].isEmpty()) {
-            System.out.println("id를 입력해주세요.");
+        if (id == -1) {
+            System.out.println("id를 숫자로 입력해주세요.");
             return;
         }
 
-        // id를 정수로 변환
-        int id = Integer.parseInt(cmdBits[1]);
-
         boolean deleted = delete(id);
 
-        // 삭제된 인덱스가 -1이면 해당 id의 명언이 존재하지 않음을 알림
+        // 삭제된 명언이 없으면 해당 id의 명언이 존재하지 않음을 알림
         if (!deleted) {
             System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
             return;
@@ -104,6 +102,7 @@ public class App {
     }
 
     // 삭제 메서드
+    // id에 해당하는 명언을 삭제하고, 삭제되었으면 true 반환
     private boolean delete(int id) {
         // 기존 로직보다 성능은 안좋지만 가독성이 좋음
         // 무조건 전체탐색 진행 느림
@@ -116,17 +115,13 @@ public class App {
     }
 
     // 수정 명령어 처리
-    private void actionModify(String cmd) {
-        String[] cmdBits = cmd.split("=", 2); // 수정 명령어와 id 분리
+    private void actionModify(Rq rq) {
+        int id = rq.getParamAsInt("id", -1);
 
-        // id가 입력되지 않은 경우 처리
-        // cmdBits 배열의 길이가 2보다 작거나, 두 번째 요소가 비어있으면 id가 입력되지 않은 것으로 간주
-        if (cmdBits.length < 2 || cmdBits[1].isEmpty()) {
-            System.out.println("id를 입력해주세요");
+        if (id == -1) {
+            System.out.println("id를 숫자로 입력해주세요.");
             return;
         }
-
-        int id = Integer.parseInt(cmdBits[1]); // id를 정수로 변환
 
         // id에 해당하는 명언을 찾음
         WiseSaying wiseSaying = findById(id);
