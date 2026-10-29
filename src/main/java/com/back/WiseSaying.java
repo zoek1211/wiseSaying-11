@@ -1,18 +1,21 @@
 package com.back;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class WiseSaying {
     // encapsulation
     // always use private for fields to protect the data
     // and provide public getter and setter methods to access and modify the data
     private int id;
+    private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
     private String content;
     private String author;
+    private static DateTimeFormatter forPrintDateTimeFormatter =
+        DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
 
-    // 생성자
-    // WiseSaying 객체를 생성할 때 id, content, author를 설정
-    // id는 final이라 생성 후 변경 불가
-    public WiseSaying(int id, String content, String author) {
-        this.id = id;
+    public WiseSaying(String content, String author) {
         this.content = content;
         this.author = author;
     }
@@ -23,6 +26,22 @@ public class WiseSaying {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(LocalDateTime modifyDate) {
+        this.modifyDate = modifyDate;
     }
 
     public String getContent() {
@@ -41,8 +60,15 @@ public class WiseSaying {
         this.author = author;
     }
 
-    public WiseSaying(String content, String author) {
-        this.content = content;
-        this.author = author;
+    public boolean isNew() {
+        return getId() == 0;
+    }
+
+    public String getForPrintCreateDate() {
+        return createDate.format(forPrintDateTimeFormatter);
+    }
+
+    public String getForPrintModifyDate() {
+        return modifyDate.format(forPrintDateTimeFormatter);
     }
 }
