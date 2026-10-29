@@ -1,5 +1,6 @@
 package com.back.domain.wiseSaying.service;
 
+import com.back.AppContext;
 import com.back.WiseSaying;
 import com.back.domain.wiseSaying.repository.WiseSayingRepository;
 
@@ -7,11 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WiseSayingService {
-    private final WiseSayingRepository wiseSayingRepository;
-
-    public WiseSayingService() {
-        this.wiseSayingRepository = new WiseSayingRepository();
-    }
+    private final WiseSayingRepository wiseSayingRepository = AppContext.wiseSayingRepository;
 
     // 명언 배열 역순으로 변환
     public List<WiseSaying> findForList() {

@@ -13,7 +13,7 @@ public class WiseSaying {
     private String content;
     private String author;
     private static DateTimeFormatter forPrintDateTimeFormatter =
-        DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
+        AppContext.forPrintDateTimeFormatter;
 
     public WiseSaying(String content, String author) {
         this.content = content;

@@ -8,21 +8,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    private final Scanner sc = new Scanner(System.in);
-
     // run app 진입점 시작
     public void run() {
         System.out.println("== 명언 앱 ==");
 
-        // systemcontroller 도입
-        SystemController systemController = new SystemController();
+        Scanner scanner = AppContext.scanner;
 
-        // wisesaying controller 도입
-        WiseSayingController wiseSayingController = new WiseSayingController(sc);
+        SystemController systemController = AppContext.systemController;
+        WiseSayingController wiseSayingController = AppContext.wiseSayingController;
 
         while (true) {
             System.out.println("명령) ");
-            String cmd = sc.nextLine().trim();
+            String cmd = scanner.nextLine().trim();
 
             // 입력받은 명령어를 actionName과 파라미터로 파싱
             Rq rq = new Rq(cmd);
