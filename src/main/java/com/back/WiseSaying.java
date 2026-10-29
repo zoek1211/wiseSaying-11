@@ -4,7 +4,7 @@ public class WiseSaying {
     // encapsulation
     // always use private for fields to protect the data
     // and provide public getter and setter methods to access and modify the data
-    private final int id;
+    private int id;
     private String content;
     private String author;
 
@@ -21,9 +21,14 @@ public class WiseSaying {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getContent() {
         return content;
     }
+
     public void setContent(String content) {
         this.content = content;
     }
@@ -31,7 +36,13 @@ public class WiseSaying {
     public String getAuthor() {
         return author;
     }
+
     public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public WiseSaying(String content, String author) {
+        this.content = content;
         this.author = author;
     }
 }
